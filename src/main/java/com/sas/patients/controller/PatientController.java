@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/patients")
 public class PatientController {
 
     private final PatientService patientService;
@@ -16,14 +16,14 @@ public class PatientController {
         this.patientService = patientService;
     }
 
-    @GetMapping("/patients")
+    @GetMapping
     public List<Patient> getPatients() {
         return patientService.getPatients();
     }
-    
+
     @GetMapping("/patient/{name}")
-    public List<Patient> getPatientsByName(@PathVariable String name) {
-        return patientService.getPatientsByName(name);
+    public List<Patient> getPatientsByPartialName(@PathVariable String name) {
+        return patientService.getPatientsByPartialName(name);
     }
 
     @GetMapping("/patient/{dni}")
@@ -31,7 +31,7 @@ public class PatientController {
         return patientService.getPatientByDni(dni);
     }
 
-    @PostMapping
+    @PostMapping("/new")
     public Patient createPatient(@RequestBody Patient patient) {
         return patientService.createPatient(patient);
     }

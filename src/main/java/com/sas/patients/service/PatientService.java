@@ -16,19 +16,19 @@ public class PatientService implements IPatientService{
     }
 
     @Override
-    public List<Patient> findAll() {
+    public List<Patient> getPatients() {
         return patientRepository.findAll();
-    }
+    }//todo: se trae todo de la database -> paginar
 
     @Override
-    public List<Patient> findByName(String name) {
+    public List<Patient> getPatientsByPartialName(String name) {
 
         return patientRepository.findAll().stream()//todo: se trae todo de la database ->ineficiente
-                .filter(p -> p.getFirstName().contains(name) ).toList();
+                .filter(p -> p.getFirstName().toLowerCase().contains(name.toLowerCase()) ).toList();
     }
 
     @Override
-    public Patient findByDni(String dni) {
+    public Patient getPatientByDni(String dni) {
         if (dni == null || dni.isBlank()){
             throw new IllegalArgumentException("El DNI proporcionado no es válido.");
         }
