@@ -42,12 +42,25 @@ public class PatientService implements IPatientService{
 
     @Override
     public Patient updatePatient(Long id, Patient patient) {
-        return null;
+        Patient updatedPatient = patientRepository.findById(id)
+                .orElseThrow(() -> new PatientNotFoundException("Paciente no encontrado."));
+
+        updatedPatient.setDni(patient.getDni());
+        updatedPatient.setFirstName(patient.getFirstName());
+        updatedPatient.setLastName(patient.getLastName());
+        updatedPatient.setEmail(patient.getEmail());
+        updatedPatient.setTelephone(patient.getTelephone());
+        updatedPatient.setHealthCare(patient.getHealthCare());
+
+        return patientRepository.save(updatedPatient);
     }
 
     @Override
     public void deletePatient(Long id) {
-
+        if (!patientRepository.existsById(id)) {
+            throw new PatientNotFoundException("Paciente no encontrado.");
+        }
+        patientRepository.deleteById(id);
     }
 
 }
