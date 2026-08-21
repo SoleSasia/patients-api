@@ -1,5 +1,6 @@
 package com.sas.patients.service;
 
+import com.sas.patients.exception.DuplicatedPatientException;
 import com.sas.patients.exception.PatientNotFoundException;
 import com.sas.patients.model.Patient;
 import com.sas.patients.repository.PatientRepository;
@@ -16,15 +17,15 @@ public class PatientService implements IPatientService{
     }
 
     @Override
-    public List<Patient> getPatients() {
+    public List<Patient> getAllPatients() {
         return patientRepository.findAll();
     }//todo: se trae todo de la database -> paginar
 
     @Override
     public List<Patient> getPatientsByPartialName(String name) {
-
+//todo: arrojar notfoundexception
         return patientRepository.findAll().stream()//todo: se trae todo de la database ->ineficiente
-                .filter(p -> p.getFirstName().toLowerCase().contains(name.toLowerCase()) ).toList();
+                .filter(p -> p.getFirstName().toLowerCase().contains(name.toLowerCase())).toList();
     }
 
     @Override
@@ -38,7 +39,12 @@ public class PatientService implements IPatientService{
     }
 
     @Override
-    public Patient createPatient(Patient patient) { return patientRepository.save(patient); }
+    public Patient createPatient(Patient patient) {
+        if (patientRepository.findAll().stream().anyMatch(p -> p.getDni().equals(patient.getDni()))) {
+            throw new DuplicatedPatientException("Paciente existente");
+        }
+        return patientRepository.save(patient);
+    }
 
     @Override
     public Patient updatePatient(Long id, Patient patient) {

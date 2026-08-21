@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface IPatientService {
 
-    List<Patient> getPatients();
+    List<Patient> getAllPatients();
     List<Patient> getPatientsByPartialName(String name);
     Patient getPatientByDni(String dni);
     Patient createPatient(Patient patient);
